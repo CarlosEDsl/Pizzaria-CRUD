@@ -1,4 +1,4 @@
-package repositories;
+package dao;
 
 import model.DIATRABALHO;
 import model.Pedido;
@@ -9,12 +9,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
-public class DIATRABALHORepository {
+public class DIATRABALHODAO {
 
     private final List<DIATRABALHO> diasTrabalho = new ArrayList<>();
     private int id = 0;
 
-    public DIATRABALHORepository() {}
+    public DIATRABALHODAO() {}
 
     public DIATRABALHO create(Pedido[] pedidos, LocalDate data) {
         this.id++;
@@ -23,9 +23,11 @@ public class DIATRABALHORepository {
         return diaTrabalho;
     }
 
-    public DIATRABALHO read(LocalDate date) {
+
+
+    public DIATRABALHO read(LocalDate data) {
         Optional<DIATRABALHO> diaTrabalho = this.diasTrabalho.stream()
-                .filter(d -> d.getData().equals(date))  // Comparando LocalDate
+                .filter(d -> d.getData().equals(data))
                 .findFirst();
         return diaTrabalho.orElse(null);
     }
@@ -59,9 +61,9 @@ public class DIATRABALHORepository {
         return false;
     }
 
-    public void addPedido(Pedido pedido, LocalDate date) {
+    public void addPedido(Pedido pedido, LocalDate data) {
         Optional<DIATRABALHO> diaTrabalhoOptional = this.diasTrabalho.stream()
-                .filter(dia -> dia.getData().equals(date))
+                .filter(dia -> dia.getData().equals(data))
                 .findFirst();
 
         if (diaTrabalhoOptional.isPresent()) {
@@ -74,13 +76,13 @@ public class DIATRABALHORepository {
 
             diaTrabalho.setPedidos(novosPedidos);
         } else {
-
             Pedido[] novoArrayPedidos = new Pedido[1];
             novoArrayPedidos[0] = pedido;
-            DIATRABALHO novoDia = this.create(novoArrayPedidos, date);
-            novoDia.setPedidos(novoArrayPedidos);
-            this.diasTrabalho.add(novoDia);
+            this.create(novoArrayPedidos, data);
         }
     }
 
+    public List<DIATRABALHO> findAll() {
+        return new ArrayList<>(this.diasTrabalho);
+    }
 }

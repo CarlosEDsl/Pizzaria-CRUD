@@ -1,44 +1,44 @@
 package services;
 
+import dao.PizzaDAO;
 import model.Pizza;
-import repositories.PizzaRepository;
+
+import java.util.List;
 
 public class PizzaService {
 
-    private final PizzaRepository pizzaRepository;
+    private final PizzaDAO pizzaDAO;
 
     public PizzaService() {
-        this.pizzaRepository = new PizzaRepository();
+        this.pizzaDAO = new PizzaDAO();
     }
 
     public Pizza createPizza(String name, Double price) {
-        return this.pizzaRepository.create(name, price);
+        return this.pizzaDAO.create(name, price);
     }
 
     public Pizza getPizzaById(int id) {
-        Pizza pizza = this.pizzaRepository.read(id);
-        if (pizza == null) {
-            System.out.println("Pizza com ID " + id + " não encontrada.");
-        }
-        return pizza;
+        return this.pizzaDAO.read(id)
+                .orElseThrow(() -> new IllegalArgumentException("Pizza com ID " + id + " não encontrada."));
     }
 
-    public Pizza updatePizza(int id, String name, Double price) {
-        Pizza updatedPizza = this.pizzaRepository.update(id, name, price);
-        if (updatedPizza == null) {
+    public boolean updatePizza(int id, String name, Double price) {
+        boolean updated = this.pizzaDAO.update(id, name, price);
+        if (!updated) {
             System.out.println("Pizza com ID " + id + " não encontrada para atualização.");
         }
-        return updatedPizza;
+        return updated;
     }
 
     public boolean deletePizza(int id) {
-        Pizza pizza = this.pizzaRepository.read(id);
-        if (pizza != null) {
-            this.pizzaRepository.delete(id);
-            return true;
-        } else {
+        boolean deleted = this.pizzaDAO.delete(id);
+        if (!deleted) {
             System.out.println("Pizza com ID " + id + " não encontrada para exclusão.");
-            return false;
         }
+        return deleted;
+    }
+
+    public List<Pizza> getAllPizzas() {
+        return this.pizzaDAO.findAll();
     }
 }

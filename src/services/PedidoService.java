@@ -1,28 +1,29 @@
 package services;
 
+import dao.PedidoDAO;
 import model.DIATRABALHO;
 import model.Pedido;
 import model.Pizza;
-import repositories.PedidoRepository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public class PedidoService {
 
-    private final PedidoRepository pedidoRepository;
+    private final PedidoDAO pedidoDAO;
     private final DIATRABALHOService diatrabalhoService;
 
     public PedidoService() {
-        this.pedidoRepository = new PedidoRepository();
+        this.pedidoDAO = new PedidoDAO();
         this.diatrabalhoService = new DIATRABALHOService();
     }
 
     public Pedido createPedido(int cliente, LocalDateTime data, Pizza[] pizzas) {
 
         DIATRABALHO dia = this.diatrabalhoService.pedidoPorDia(data.toLocalDate());
-        Pedido pedido = this.pedidoRepository.create(cliente, data, pizzas);
+        Pedido pedido = this.pedidoDAO.create(cliente, data, pizzas);
 
         if(dia == null) {
             Pedido[] pedidos = new Pedido[1];
@@ -35,9 +36,9 @@ public class PedidoService {
         return pedido;
     }
 
-    public Pedido getPedidoById(int id) {
+    public Optional<Pedido> getPedidoById(int id) {
         try {
-            return this.pedidoRepository.read(id);
+            return this.pedidoDAO.read(id);
         } catch (RuntimeException e) {
             System.out.println(e.getMessage());
             return null;
@@ -45,7 +46,7 @@ public class PedidoService {
     }
 
     public Pedido updatePedido(int id, int cliente, LocalDateTime data, Pizza[] pizzas) {
-        Pedido updatedPedido = this.pedidoRepository.update(id, cliente, data, pizzas);
+        Pedido updatedPedido = this.pedidoDAO.update(id, cliente, data, pizzas);
         if (updatedPedido == null) {
             System.out.println("Pedido com ID " + id + " não encontrado para atualização.");
         }
@@ -53,7 +54,7 @@ public class PedidoService {
     }
 
     public void deletePedido(int id) {
-        this.pedidoRepository.delete(id);
+        this.pedidoDAO.delete(id);
     }
 
     public DIATRABALHO getPedidosDia(LocalDate date) {
@@ -61,7 +62,7 @@ public class PedidoService {
     }
 
     public List<Pedido> getPedidosPorCliente(int client_id) {
-        return this.pedidoRepository.getPedidosPorCliente(client_id);
+        return this.pedidoDAO.getPedidosPorCliente(client_id);
     }
 
 

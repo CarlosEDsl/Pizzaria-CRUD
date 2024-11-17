@@ -2,24 +2,24 @@ package services;
 
 import model.DIATRABALHO;
 import model.Pedido;
-import repositories.DIATRABALHORepository;
+import dao.DIATRABALHODAO;
 
 import java.time.LocalDate;
 
 public class DIATRABALHOService {
 
-    private final DIATRABALHORepository diatrabalhoRepository;
+    private final DIATRABALHODAO diatrabalhoDAO;
 
     public DIATRABALHOService() {
-        this.diatrabalhoRepository = new DIATRABALHORepository();
+        this.diatrabalhoDAO = new DIATRABALHODAO();
     }
 
     public DIATRABALHO createDia(Pedido[] pedidos, LocalDate data) {
-        return this.diatrabalhoRepository.create(pedidos, data);
+        return this.diatrabalhoDAO.create(pedidos, data);
     }
 
     public DIATRABALHO getDia(LocalDate data) {
-        DIATRABALHO diatrabalho = this.diatrabalhoRepository.read(data);
+        DIATRABALHO diatrabalho = this.diatrabalhoDAO.read(data);
         if (diatrabalho == null) {
             System.out.println("Dia de trabalho com Data " + data + " não encontrado.");
         }
@@ -27,7 +27,7 @@ public class DIATRABALHOService {
     }
 
     public DIATRABALHO updateDia(int id, Pedido[] pedidos, LocalDate data) {
-        DIATRABALHO updatedDayWork = this.diatrabalhoRepository.update(id, pedidos, data);
+        DIATRABALHO updatedDayWork = this.diatrabalhoDAO.update(id, pedidos, data);
         if (updatedDayWork == null) {
             System.out.println("Dia de trabalho com ID " + id + " não encontrado para atualização.");
         }
@@ -35,7 +35,7 @@ public class DIATRABALHOService {
     }
 
     public boolean deleteDia(int id) {
-        boolean deleted = this.diatrabalhoRepository.delete(id);
+        boolean deleted = this.diatrabalhoDAO.delete(id);
         if (!deleted) {
             System.out.println("Dia de trabalho com ID " + id + " não encontrado para exclusão.");
         }
@@ -43,11 +43,11 @@ public class DIATRABALHOService {
     }
 
     public void addPedido(Pedido pedido, LocalDate date) {
-        this.diatrabalhoRepository.addPedido(pedido, date);
+        this.diatrabalhoDAO.addPedido(pedido, date);
     }
 
     public DIATRABALHO pedidoPorDia(LocalDate date) {
-        return this.diatrabalhoRepository.read(date);
+        return this.diatrabalhoDAO.read(date);
     }
 
 }
