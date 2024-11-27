@@ -1,5 +1,6 @@
 package dao;
 
+import model.DIATRABALHO;
 import model.Pedido;
 import model.Pizza;
 
@@ -9,14 +10,29 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
-public class PedidoDAO {
+public class OrderDAO {
 
     private final List<Pedido> pedidos = new ArrayList<>();
+    private final WorkedDay workedDay;
     private int id = 0;
+
+    public OrderDAO(WorkedDay workedDay) {
+        this.workedDay = workedDay;
+    }
 
     public Pedido create(int cliente, LocalDateTime data, Pizza[] pizzas) {
         this.id++;
         Pedido pedido = new Pedido(this.id, cliente, data, pizzas);
+        DIATRABALHO dia = this.workedDay.pedidoPorDia(data.toLocalDate());
+
+        if(dia == null) {
+            Pedido[] pedidos = new Pedido[1];
+            pedidos[0] = pedido;
+            this.workedDay.create(pedidos, data.toLocalDate());
+        } else {
+            this.workedDay.addPedido(pedido, data.toLocalDate());
+        }
+
         this.pedidos.add(pedido);
         return pedido;
     }

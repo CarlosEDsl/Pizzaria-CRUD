@@ -1,16 +1,11 @@
 package model;
 
-public class Pizza {
-
+public abstract class Pizza {
     private int id;
+    private String ingredients;
     private String name;
-    private Double price;
-
-    public Pizza(int id, String name, Double price) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
-    }
+    private double price;
+    private int amount;
 
     public int getId() {
         return id;
@@ -18,6 +13,14 @@ public class Pizza {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(String ingredients) {
+        this.ingredients = ingredients;
     }
 
     public String getName() {
@@ -28,20 +31,30 @@ public class Pizza {
         this.name = name;
     }
 
-    public Double getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(double price) {
         this.price = price;
+    }
+
+    public int getAmount() {
+        return amount;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
     }
 
     @Override
     public String toString() {
         return "Pizza{" +
                 "id=" + id +
+                ", ingredients='" + ingredients + '\'' +
                 ", name='" + name + '\'' +
                 ", price=" + price +
+                ", amount=" + amount +
                 '}';
     }
 }

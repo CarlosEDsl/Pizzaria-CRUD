@@ -9,12 +9,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
-public class DIATRABALHODAO {
+public class WorkedDay {
 
     private final List<DIATRABALHO> diasTrabalho = new ArrayList<>();
     private int id = 0;
 
-    public DIATRABALHODAO() {}
+    public WorkedDay() {}
 
     public DIATRABALHO create(Pedido[] pedidos, LocalDate data) {
         this.id++;
@@ -84,5 +84,9 @@ public class DIATRABALHODAO {
 
     public List<DIATRABALHO> findAll() {
         return new ArrayList<>(this.diasTrabalho);
+    }
+
+    public DIATRABALHO pedidoPorDia(LocalDate date) {
+        return this.read(date);
     }
 }

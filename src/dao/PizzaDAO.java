@@ -12,9 +12,9 @@ public class PizzaDAO {
     private final List<Pizza> pizzas = new ArrayList<>();
     private int id = 0;
 
-    public Pizza create(String name, Double price) {
+    public Pizza create(Pizza pizza) {
         this.id++;
-        Pizza pizza = new Pizza(this.id, name, price);
+        pizza.setId(id);
         this.pizzas.add(pizza);
         return pizza;
     }
@@ -25,15 +25,14 @@ public class PizzaDAO {
                 .findFirst();
     }
 
-    public boolean update(int id, String name, Double price) {
+    public boolean update(Pizza pizza) {
         int pizzaIndex = IntStream.range(0, this.pizzas.size())
                 .filter(i -> this.pizzas.get(i).getId() == id)
                 .findFirst()
                 .orElse(-1);
 
         if (pizzaIndex != -1) {
-            Pizza updatedPizza = new Pizza(id, name, price);
-            this.pizzas.set(pizzaIndex, updatedPizza);
+            this.pizzas.set(pizzaIndex, pizza);
             return true;
         }
         return false;
